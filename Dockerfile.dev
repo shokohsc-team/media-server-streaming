@@ -1,0 +1,14 @@
+FROM jrottenberg/ffmpeg:4.1-scratch as ffmpeg
+
+FROM cosmtrek/air
+
+RUN mkdir -p /.cache/go-build && chmod -R 0755 /.cache && chown -R 1000:1000 /.cache
+
+WORKDIR /app
+ENV air_wd /app
+
+COPY . .
+COPY --from=ffmpeg /bin/ffmpeg /usr/bin/ffmpeg
+COPY --from=ffmpeg /bin/ffprobe /usr/bin/ffprobe
+
+USER 1000:1000

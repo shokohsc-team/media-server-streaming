@@ -1,0 +1,5 @@
+k8s/
+Dockerfile
+Dockerfile.dev
+skaffold.yaml
+netflix

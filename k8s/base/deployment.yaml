@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: bitnami/postgresql
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRESQL_USERNAME
+              value: netflix
+            - name: POSTGRESQL_PASSWORD
+              value: netflix
+            - name: POSTGRESQL_DATABASE
+              value: netflix
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: postgres
+          livenessProbe:
+            tcpSocket:
+              port: postgres
+          readinessProbe:
+            tcpSocket:
+              port: postgres
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64M
+            limits:
+              cpu: 1000m
+              memory: 512M
