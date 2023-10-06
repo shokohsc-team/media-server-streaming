@@ -10,3 +10,7 @@ type Video struct {
 	CategoryID int
     Category Category
 }
+
+func (v *Video) Extensions() string {
+    return v.Path
+}

@@ -12,14 +12,10 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
 
-	"github.com/shokohsc-team/netflix/models"
+	"github.com/shokohsc-team/netflix/internal/models"
 )
 
 const mediaPath = "/mnt"
-
-func (v *Video) Extensions() string {
-    return v.Path
-}
 
 func scan(directory string) error {
 	var files []string
