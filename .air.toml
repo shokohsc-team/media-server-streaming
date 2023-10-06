@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/netflix"
-  cmd = "go build -o ./tmp/netflix ."
+  cmd = "GOFLAGS=-buildvcs=false go build -o ./tmp/netflix ."
   delay = 0
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
