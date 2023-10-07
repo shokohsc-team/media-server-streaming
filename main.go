@@ -8,14 +8,32 @@ import (
 
     "github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/etag"
-
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
 
-	"github.com/shokohsc-team/netflix/internal/models"
+	"netflix/models"
 )
 
 const mediaPath = "/mnt"
+var db *gorm.DB
+
+type Env struct {
+	categories models.CategoryModel
+	videos models.VideoModel
+}
+
+func initDb() {
+	dsn := "host=postgres user=netflix password=netflix dbname=netflix port=5432 sslmode=disable TimeZone=Europe/Paris"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+        log.Fatal(err)
+    }
+
+	// Migrate the schema
+	db.AutoMigrate(&models.Category{})
+	db.AutoMigrate(&models.Video{})
+}
 
 func scan(directory string) error {
 	var files []string
@@ -45,16 +63,7 @@ func scan(directory string) error {
 }
 
 func main() {
-	dsn := "host=postgres user=netflix password=netflix dbname=netflix port=5432 sslmode=disable TimeZone=Europe/Paris"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-        panic("Failed to connect to database")
-    }
-	// Migrate the schema
-	db.AutoMigrate(&Category{})
-	db.AutoMigrate(&Video{})
-
-
+	initDb()
     // Start a new fiber app
     app := fiber.New(fiber.Config{
 		AppName: "netflix",
@@ -63,16 +72,39 @@ func main() {
     })
 
 	app.Use(etag.New())
+	app.Use(cors.New())
 
 	// Send a string back for GET calls to the endpoint "/"
     app.Get("/ready", func(c *fiber.Ctx) error {
 		return c.Send(nil)
     }).Name("ready")
 
+	app.Post("/category", func(c *fiber.Ctx) (category models.Category) {
+		env := &Env{
+			categories: models.CategoryModel{DB: db},
+		}
+		category := env.categories.Create(c)
+
+		return c.JSON(fiber.Map{
+			"name": category.Name,
+		})
+	}).Name("postCategory")
+
+	// app.Post("/video", func(c *fiber.Ctx) error {
+	// 	env := &Env{
+	// 		videos: models.VideoModel{DB: db},
+	// 	}
+	// 	env.videos.Create(c)
+    //
+	// return c.Send(nil)
+	// }).Name("videoCategory")
+
 	app.Post("/scan", func(c *fiber.Ctx) error {
 		// Look for video to save to database
-		scan(mediaPath + "/" + c.Params("directory"))
-		return c.SendString(c.Params("categoryId"))
+		go scan(mediaPath)
+		return c.JSON(fiber.Map{
+			"status": "scan started.",
+		})
     }).Name("scan")
 
     app.Get("/start/:videoId", func(c *fiber.Ctx) error {

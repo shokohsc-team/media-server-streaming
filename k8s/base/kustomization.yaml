@@ -7,3 +7,10 @@ resources:
 - deployment.yaml
 - service.yaml
 - netflix/
+
+configMapGenerator:
+- name: config
+  files:
+  - ./config/.air.toml
+generatorOptions:
+  disableNameSuffixHash: true

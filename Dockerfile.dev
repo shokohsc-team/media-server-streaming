@@ -2,6 +2,9 @@ FROM jrottenberg/ffmpeg:4.1-scratch as ffmpeg
 
 FROM cosmtrek/air
 
+ARG SKAFFOLD_GO_GCFLAGS
+ENV GOTRACEBACK=single
+
 RUN mkdir -p /.cache/go-build && chmod -R 0755 /.cache && chown -R 1000:1000 /.cache
 
 WORKDIR /app

@@ -8,14 +8,15 @@ FROM golang as builder
 RUN apt update && apt install -y sudo git ca-certificates && update-ca-certificates
 # Create appuser
 ENV USER=netflix
-ENV UID=10001
-ENV GID=10001
+ENV UID=1000
+ENV GID=1000
+ENV GOFLAGS="-buildvcs=false"
 RUN addgroup --gid $GID netflix && \
     adduser --uid $UID --gid $GID --disabled-password --gecos "" netflix && \
     echo 'netflix ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 COPY . .
 # Build the binary
-RUN go build -o /go/bin/netflix
+RUN go build -trimpath -o /go/bin/netflix
 ############################
 # STEP 2 build a small image
 ############################

@@ -4,11 +4,15 @@ metadata:
   name: netflix
 build:
   artifacts:
-    - image: shokohsc-team/netflix
+    - image: shokohsc/netflix
       context: .
       sync:
         manual:
-          - src: ./internal/**/*.go
+          - src: main.go
+            dest: .
+          - src: base.go
+            dest: .
+          - src: '**/*.go'
             dest: .
       docker:
         dockerfile: Dockerfile
@@ -24,24 +28,32 @@ profiles:
       - command: dev
     build:
       artifacts:
-        - image: shokohsc-team/netflix
+        - image: shokohsc/netflix
           sync:
             manual:
-              - src: ./internal/**/*.go
+              - src: main.go
+                dest: .
+              - src: database.go
+                dest: .
+              - src: '**/*.go'
                 dest: .
           docker:
             dockerfile: Dockerfile.dev
   - name: shokohsc
     build:
       artifacts:
-        - image: shokohsc-team/netflix
+        - image: shokohsc/netflix
           sync:
             manual:
-              - src: ./internal/**/*.go
+              - src: main.go
+                dest: .
+              - src: database.go
+                dest: .
+              - src: '**/*.go'
                 dest: .
           kaniko:
             cache:
-              repo: shokohsc-team/netflix
+              repo: shokohsc/netflix
             dockerfile: Dockerfile.dev
       cluster:
         dockerConfig:
@@ -64,10 +76,10 @@ profiles:
   - name: prod
     build:
       artifacts:
-        - image: shokohsc-team/netflix
+        - image: shokohsc/netflix
           kaniko:
             cache:
-              repo: shokohsc-team/netflix
+              repo: shokohsc/netflix
             dockerfile: Dockerfile
       cluster:
         dockerConfig:

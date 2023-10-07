@@ -1,5 +1,7 @@
 k8s/
+tmp/
 Dockerfile
 Dockerfile.dev
 skaffold.yaml
 netflix
+.air.toml
