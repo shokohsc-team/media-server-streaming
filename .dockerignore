@@ -4,4 +4,3 @@ Dockerfile
 Dockerfile.dev
 skaffold.yaml
 netflix
-.air.toml

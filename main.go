@@ -79,11 +79,14 @@ func main() {
 		return c.Send(nil)
     }).Name("ready")
 
-	app.Post("/category", func(c *fiber.Ctx) (category models.Category) {
+	app.Post("/category", func(c *fiber.Ctx) error {
 		env := &Env{
 			categories: models.CategoryModel{DB: db},
 		}
-		category := env.categories.Create(c)
+		category, err := env.categories.Create(c)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		return c.JSON(fiber.Map{
 			"name": category.Name,
