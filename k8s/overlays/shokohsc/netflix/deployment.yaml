@@ -1,0 +1,47 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: netflix
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: netflix
+          image: shokohsc/netflix
+          env:
+            - name: DATABASE_URL
+              value: "host=postgres port=5432 user=netflix password=netflix dbname=netflix sslmode=disable"
+          args:
+            - -c
+            - .air.toml
+          volumeMounts:
+            - name: cache
+              mountPath: /.cache/go-build
+            - name: tmp
+              mountPath: /app/tmp
+            - name: wd-lucio
+              mountPath: /mnt/nfs-wd-lucio
+            - name: wd-zarya
+              mountPath: /mnt/nfs-wd-zarya
+            - name: wd-sombra
+              mountPath: /mnt/nfs-wd-sombra
+      volumes:
+        - name: cache
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: wd-lucio
+          nfs:
+            server: nfs-wd-lucio.nfs-wd-lucio.svc.cluster.local
+            path: /
+        - name: wd-zarya
+          nfs:
+            server: nfs-wd-zarya.nfs-wd-zarya.svc.cluster.local
+            path: /
+        - name: wd-sombra
+          nfs:
+            server: nfs-wd-sombra.nfs-wd-sombra.svc.cluster.local
+            path: /

@@ -3,4 +3,4 @@ tmp/
 Dockerfile
 Dockerfile.dev
 skaffold.yaml
-netflix
+./netflix

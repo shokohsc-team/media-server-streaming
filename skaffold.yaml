@@ -10,8 +10,6 @@ build:
         manual:
           - src: main.go
             dest: .
-          - src: base.go
-            dest: .
           - src: '**/*.go'
             dest: .
       docker:
@@ -33,8 +31,6 @@ profiles:
             manual:
               - src: main.go
                 dest: .
-              - src: database.go
-                dest: .
               - src: '**/*.go'
                 dest: .
           docker:
@@ -46,8 +42,6 @@ profiles:
           sync:
             manual:
               - src: main.go
-                dest: .
-              - src: database.go
                 dest: .
               - src: '**/*.go'
                 dest: .
