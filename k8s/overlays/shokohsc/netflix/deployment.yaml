@@ -11,9 +11,6 @@ spec:
       containers:
         - name: netflix
           image: shokohsc/netflix
-          env:
-            - name: DATABASE_URL
-              value: "host=postgres port=5432 user=netflix password=netflix dbname=netflix sslmode=disable"
           args:
             - -c
             - .air.toml

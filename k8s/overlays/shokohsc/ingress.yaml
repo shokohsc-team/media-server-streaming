@@ -1,0 +1,54 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adminer
+  annotations:
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+    dashboard.shokohsc.home/icon: wrench
+    dashboard.shokohsc.home/name: adminer
+    dashboard.shokohsc.home/url: https://adminer.netflix.shokohsc.home
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: "adminer.netflix.shokohsc.home"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: adminer
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - "adminer.netflix.shokohsc.home"
+      secretName: adminer-cert
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq
+  annotations:
+    cert-manager.io/cluster-issuer: ca-cluster-issuer
+    dashboard.shokohsc.home/icon: wrench
+    dashboard.shokohsc.home/name: rabbitmq
+    dashboard.shokohsc.home/url: https://rabbitmq.netflix.shokohsc.home
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: "rabbitmq.netflix.shokohsc.home"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: 15672
+  tls:
+    - hosts:
+        - "rabbitmq.netflix.shokohsc.home"
+      secretName: rabbitmq-cert

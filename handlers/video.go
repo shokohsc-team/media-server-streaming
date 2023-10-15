@@ -48,7 +48,7 @@ func GetVideos(c *fiber.Ctx) error {
 func GetVideoById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -82,7 +82,7 @@ func UpdateVideo(c *fiber.Ctx) error {
 		})
 	}
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -116,7 +116,7 @@ func DeleteVideo(c *fiber.Ctx) error {
 	library := c.Locals("library").(models.Library)
 	collection := c.Locals("collection").(models.Collection)
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,

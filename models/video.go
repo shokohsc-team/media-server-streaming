@@ -2,16 +2,17 @@ package models
 
 import (
 	"time"
+
 	"gorm.io/gorm"
 )
 
 type Video struct {
 	gorm.Model
-	ID        		int       		`gorm:"primaryKey" json:"id"`
-	CreatedAt 		time.Time 		`json:"created_at"`
-	UpdatedAt 		time.Time 		`json:"updated_at"`
-	DeletedAt 		gorm.DeletedAt 	`gorm:"index" json:"deleted_at,omitempty"`
+	ID        		uint64       `gorm:"primary_key; unique; type:uint64;`
+	CreatedAt 		time.Time
+	UpdatedAt 		time.Time
+	DeletedAt 		gorm.DeletedAt 	`gorm:"index" json:",omitempty"`
 	Path          	string     		`json:"path"`
-	LibraryID 		int       		`gorm:"type:int" json:"library"`
-	CollectionID 	int       		`gorm:"type:int" json:"collection"`
+	LibraryID 		uint64       		`gorm:"type:uint64" json:"library"`
+	CollectionID 	uint64       		`gorm:"type:uint64" json:"collection"`
 }

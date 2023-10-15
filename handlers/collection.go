@@ -44,7 +44,7 @@ func GetCollections(c *fiber.Ctx) error {
 func GetCollectionById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -76,7 +76,7 @@ func UpdateCollection(c *fiber.Ctx) error {
 		})
 	}
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -106,7 +106,7 @@ func UpdateCollection(c *fiber.Ctx) error {
 func DeleteCollection(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,

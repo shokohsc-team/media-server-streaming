@@ -16,6 +16,11 @@ spec:
       containers:
         - name: netflix
           image: shokohsc/netflix
+          env:
+            - name: DATABASE_URL
+              value: "host=postgres port=5432 user=netflix password=netflix dbname=netflix sslmode=disable"
+            - name: AMQP_URL
+              value: "amqp://rabbitmq:changeme@rabbitmq:5672/"
           ports:
             - name: http
               containerPort: 8080

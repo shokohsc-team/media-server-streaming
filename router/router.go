@@ -35,6 +35,12 @@ func Initalize(app *fiber.App) {
 	videos.Get("/:id", handlers.GetVideoById).Name("getVideo")
 	videos.Put("/:id", handlers.UpdateVideo).Name("updateVideo")
 
+	app.Post("/scan", handlers.ExecuteScan).Name("executeScan")
+
+    app.Get("/start/:videoId", handlers.StartStream).Name("startStream")
+    app.Get("/stop/:videoId", handlers.StopStream).Name("stopStream")
+    app.Get("/stream/:videoId", handlers.GetStream).Name("getStream")
+
 	app.Use(func(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{
 			"code":    404,

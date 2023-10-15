@@ -20,8 +20,8 @@ func CreateLibrary(c *fiber.Ctx) error {
 		})
 	}
 	newLibrary := models.Library{
-		Name:      json.Name,
-		Path:      json.Path,
+		Path:      		json.Path,
+		LibraryType: 	json.LibraryType,
 	}
 	err := db.Create(&newLibrary).Error
 	if err != nil {
@@ -45,7 +45,7 @@ func GetLibraries(c *fiber.Ctx) error {
 func GetLibraryById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -66,8 +66,8 @@ func GetLibraryById(c *fiber.Ctx) error {
 
 func UpdateLibrary(c *fiber.Ctx) error {
 	type UpdateLibraryRequest struct {
-		Name      string `json:"name"`
-		Path      string `json:"path"`
+		Path      	string `json:"path"`
+		LibraryType models.LibraryType `json:"type"`
 	}
 	db := database.DB
 	json := new(UpdateLibraryRequest)
@@ -78,7 +78,7 @@ func UpdateLibrary(c *fiber.Ctx) error {
 		})
 	}
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -96,11 +96,11 @@ func UpdateLibrary(c *fiber.Ctx) error {
 			"message": "Library not found",
 		})
 	}
-	if json.Name != "" {
-		found.Name = json.Name
-	}
 	if json.Path != "" {
 		found.Path = json.Path
+	}
+	if json.LibraryType != "" {
+		found.LibraryType = json.LibraryType
 	}
 	db.Save(&found)
 	return c.JSON(fiber.Map{
@@ -111,7 +111,7 @@ func UpdateLibrary(c *fiber.Ctx) error {
 func DeleteLibrary(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,

@@ -93,3 +93,51 @@ spec:
             requests:
               cpu: 10m
               memory: 64M
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.9.11-management-alpine
+          env:
+            - name: RABBITMQ_ERLANG_COOKIE
+              value: ""
+            - name: RABBITMQ_DEFAULT_USER
+              value: rabbitmq
+            - name: RABBITMQ_DEFAULT_PASS
+              value: changeme
+          ports:
+            - name: amqp
+              containerPort: 5672
+              protocol: TCP
+            - name: http
+              containerPort: 15672
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256M
+            limits:
+              cpu: 1000m
+              memory: 1024M

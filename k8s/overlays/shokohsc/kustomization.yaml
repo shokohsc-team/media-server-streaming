@@ -5,6 +5,6 @@ bases:
   - ../../base
 
 patchesStrategicMerge:
+  - ingress.yaml
   - netflix/ingress.yaml
   - netflix/deployment.yaml
-
